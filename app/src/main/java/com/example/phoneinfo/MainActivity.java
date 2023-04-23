@@ -1,32 +1,22 @@
 package com.example.phoneinfo;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ApplicationErrorReport;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.opengl.GLES20;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Environment;
 import android.os.StatFs;
-import android.telephony.TelephonyManager;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
-
 
     //Declaring TextViews:
 
@@ -132,21 +122,22 @@ public class MainActivity extends AppCompatActivity {
             light = String.valueOf(sot.getPower());
         }
 
-
-
-
-        //Setting Text to their respective fields
-
         manufacturer.setText(Build.BRAND);
         model_Name.setText(Build.MODEL);
         model_Number.setText(Build.DEVICE);
        total_Ram.setText(String.valueOf(memoryInfo.totalMem).substring(0,1) + "." + String.valueOf(memoryInfo.totalMem).substring(1,2) + " GB");
        available_Ram.setText(String.valueOf(memoryInfo.availMem).substring(0,1) + "." + String.valueOf(memoryInfo.availMem).substring(1,2) + " GB");
-       total_Storage.setText(String.valueOf(statFs.getTotalBytes()).substring(0,2) + " GB");
+       total_Storage.setText(String.valueOf(statFs.getTotalBytes()/1000000000) + " GB");
        free_Storage.setText(String.valueOf(statFs.getAvailableBytes()).substring(0,2) + " GB");
        android_Version.setText(Build.VERSION.RELEASE);
        cpu.setText(Build.SOC_MODEL);
-       gpu.setText(Build.SUPPORTED_ABIS[0]);
+
+
+        String gpuInfo = GLES20.glGetString(GLES20.GL_RENDERER);
+
+
+
+        gpu.setText(gpuInfo);
        gyroscope.setText(gyro);
        accelerometer.setText(accel);
        rotation_Vector.setText(vector);
